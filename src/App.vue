@@ -5,8 +5,8 @@
         <hr>
         <h4 class="is-size-1">Pokedex</h4>
         <input class="input is-rounded" type="text" v-model="busca" placeholder="Buscar Pokemon pelo nome" />
-        <button class="button is-fullwidth is-success" id="buscaButton">Buscar</button>
-        <div v-for="(poke, index) in resultadoBusca" :key="index">
+        <button class="button is-fullwidth is-success" id="buscaButton" @click="buscar">Buscar</button>
+        <div v-for="(poke) in filteredPokemons" :key="poke.url">
         <PokemonInfo :name="poke.name" :num="poke.num" :url="poke.url" />
       </div>
     </div>
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       pokemons: [],
+      filteredPokemons: [],
       busca: ''
     };
   },
@@ -31,19 +32,30 @@ export default {
       .then((res) => {
         console.log("Pegou lista de Requisição básica!");
         this.pokemons = res.data.results;
+        this.filteredPokemons = res.data.result;
       });
   },
   components: {
     PokemonInfo,
   },
-  computed: {
-    resultadoBusca: function() {
+  methods:{
+    buscar: function(){
+      this.filteredPokemons = this.pokemons;
       if(this.busca == '' || this.busca == ' '){
-        return this.pokemons;
+        return this.pokemons
       }else{
-        return this.pokemons.filter(pokemon => pokemon.name == this.busca);
+        this.filteredPokemons = this.pokemons.filter(pokemon => pokemon.name == this.busca);
       }
     }
+  },
+  computed: {
+    // resultadoBusca: function() {
+    //   if(this.busca == '' || this.busca == ' '){
+    //     return this.pokemons;
+    //   }else{
+    //     return this.pokemons.filter(pokemon => pokemon.name == this.busca);
+    //   }
+    // }
   }
 };
 </script>
