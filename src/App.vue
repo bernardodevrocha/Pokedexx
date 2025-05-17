@@ -3,8 +3,10 @@
     <div class="column is-half is-offset-one-quarter">
         <img src="./assets/logo.png" alt="">
         <hr>
-        <h4 class="is-size-1">Pokedexx</h4>
-      <div v-for="(poke, index) in pokemons" :key="index">
+        <h4 class="is-size-1">Pokedex</h4>
+        <input class="input is-rounded" type="text" v-model="busca" placeholder="Buscar Pokemon pelo nome" />
+        <button class="button is-fullwidth is-success" id="buscaButton">Buscar</button>
+        <div v-for="(poke, index) in resultadoBusca" :key="index">
         <PokemonInfo :name="poke.name" :num="poke.num" :url="poke.url" />
       </div>
     </div>
@@ -20,6 +22,7 @@ export default {
   data() {
     return {
       pokemons: [],
+      busca: ''
     };
   },
   created: function () {
@@ -33,6 +36,15 @@ export default {
   components: {
     PokemonInfo,
   },
+  computed: {
+    resultadoBusca: function() {
+      if(this.busca == '' || this.busca == ' '){
+        return this.pokemons;
+      }else{
+        return this.pokemons.filter(pokemon => pokemon.name == this.busca);
+      }
+    }
+  }
 };
 </script>
 
@@ -45,5 +57,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#buscaButton{
+  margin-top: 15px;
 }
 </style>
